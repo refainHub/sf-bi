@@ -3,7 +3,7 @@
 import { request } from '@umijs/max';
 
 /** addUser POST /api/user/add */
-export async function addUser(body: API.UserAddRequest, options?: { [key: string]: any }) {
+export async function addUserUsingPost(body: API.UserAddRequest, options?: { [key: string]: any }) {
   return request<API.BaseResponseLong_>('/api/user/add', {
     method: 'POST',
     headers: {
@@ -15,7 +15,7 @@ export async function addUser(body: API.UserAddRequest, options?: { [key: string
 }
 
 /** deleteUser POST /api/user/delete */
-export async function deleteUser(
+export async function deleteUserUsingPost(
   body: API.DeleteRequest,
   options?: { [key: string]: any },
 ) {
@@ -30,7 +30,7 @@ export async function deleteUser(
 }
 
 /** getUserById GET /api/user/get */
-export async function getUserById(
+export async function getUserByIdUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getUserByIdUsingGETParams,
   options?: { [key: string]: any },
@@ -45,7 +45,7 @@ export async function getUserById(
 }
 
 /** getLoginUser GET /api/user/get/login */
-export async function getLoginUser(options?: { [key: string]: any }) {
+export async function getLoginUserUsingGet(options?: { [key: string]: any }) {
   return request<API.BaseResponseLoginUserVO_>('/api/user/get/login', {
     method: 'GET',
     ...(options || {}),
@@ -53,7 +53,7 @@ export async function getLoginUser(options?: { [key: string]: any }) {
 }
 
 /** getUserVOById GET /api/user/get/vo */
-export async function getUserVoById(
+export async function getUserVoByIdUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getUserVOByIdUsingGETParams,
   options?: { [key: string]: any },
@@ -68,7 +68,7 @@ export async function getUserVoById(
 }
 
 /** listUserByPage POST /api/user/list/page */
-export async function listUserByPage(
+export async function listUserByPageUsingPost(
   body: API.UserQueryRequest,
   options?: { [key: string]: any },
 ) {
@@ -83,7 +83,7 @@ export async function listUserByPage(
 }
 
 /** listUserVOByPage POST /api/user/list/page/vo */
-export async function listUserVoByPage(
+export async function listUserVoByPageUsingPost(
   body: API.UserQueryRequest,
   options?: { [key: string]: any },
 ) {
@@ -98,7 +98,7 @@ export async function listUserVoByPage(
 }
 
 /** userLogin POST /api/user/login */
-export async function userLogin(
+export async function userLoginUsingPost(
   body: API.UserLoginRequest,
   options?: { [key: string]: any },
 ) {
@@ -113,7 +113,7 @@ export async function userLogin(
 }
 
 /** userLogout POST /api/user/logout */
-export async function userLogout(options?: { [key: string]: any }) {
+export async function userLogoutUsingPost(options?: { [key: string]: any }) {
   return request<API.BaseResponseBoolean_>('/api/user/logout', {
     method: 'POST',
     ...(options || {}),
@@ -121,7 +121,7 @@ export async function userLogout(options?: { [key: string]: any }) {
 }
 
 /** userRegister POST /api/user/register */
-export async function userRegister(
+export async function userRegisterUsingPost(
   body: API.UserRegisterRequest,
   options?: { [key: string]: any },
 ) {
@@ -136,7 +136,7 @@ export async function userRegister(
 }
 
 /** updateUser POST /api/user/update */
-export async function updateUser(
+export async function updateUserUsingPost(
   body: API.UserUpdateRequest,
   options?: { [key: string]: any },
 ) {
@@ -151,7 +151,7 @@ export async function updateUser(
 }
 
 /** updateMyUser POST /api/user/update/my */
-export async function updateMyUser(
+export async function updateMyUserUsingPost(
   body: API.UserUpdateMyRequest,
   options?: { [key: string]: any },
 ) {

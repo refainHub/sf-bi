@@ -3,7 +3,7 @@
 import { request } from '@umijs/max';
 
 /** addChart POST /api/chart/add */
-export async function addChart(
+export async function addChartUsingPost(
   body: API.ChartAddRequest,
   options?: { [key: string]: any },
 ) {
@@ -18,7 +18,7 @@ export async function addChart(
 }
 
 /** deleteChart POST /api/chart/delete */
-export async function deleteChart(
+export async function deleteChartUsingPost(
   body: API.DeleteRequest,
   options?: { [key: string]: any },
 ) {
@@ -33,7 +33,7 @@ export async function deleteChart(
 }
 
 /** editChart POST /api/chart/edit */
-export async function editChart(
+export async function editChartUsingPost(
   body: API.ChartEditRequest,
   options?: { [key: string]: any },
 ) {
@@ -48,7 +48,7 @@ export async function editChart(
 }
 
 /** getChartById GET /api/chart/get */
-export async function getChartById(
+export async function getChartByIdUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getChartByIdUsingGETParams,
   options?: { [key: string]: any },
@@ -63,7 +63,7 @@ export async function getChartById(
 }
 
 /** listChartByPage POST /api/chart/list/page */
-export async function listChartByPage(
+export async function listChartByPageUsingPost(
   body: API.ChartQueryRequest,
   options?: { [key: string]: any },
 ) {
@@ -78,7 +78,7 @@ export async function listChartByPage(
 }
 
 /** listMyChartByPage POST /api/chart/my/list/page */
-export async function listMyChartByPage(
+export async function listMyChartByPageUsingPost(
   body: API.ChartQueryRequest,
   options?: { [key: string]: any },
 ) {
@@ -93,7 +93,7 @@ export async function listMyChartByPage(
 }
 
 /** updateChart POST /api/chart/update */
-export async function updateChart(
+export async function updateChartUsingPost(
   body: API.ChartUpdateRequest,
   options?: { [key: string]: any },
 ) {

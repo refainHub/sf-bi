@@ -3,10 +3,10 @@ import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import { AvatarDropdown } from './components/RightContent/AvatarDropdown';
-import { requestConfig } from './requestConfig';
-import {getLoginUser} from "@/services/backend/userController";
-// import {message} from "antd";
 
+import {getLoginUserUsingGet} from "@/services/backend/userController";
+import {message} from "antd";
+import { requestConfig } from './requestConfig';
 const loginPath = '/user/login';
 
 /**
@@ -20,7 +20,7 @@ export async function getInitialState(): Promise<InitialState> {
   const { location } = history;
   if (location.pathname !== loginPath) {
     try {
-      const res = await getLoginUser();
+      const res = await getLoginUserUsingGet();
       initialState.currentUser = res.data;
     } catch (error: any) {
       // 如果未登录
@@ -47,7 +47,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
       },
     },
     waterMarkProps: {
-      content: initialState?.currentUser?.userName,
+      content: initialState?.currentUser?.userAvatar,
     },
     footerRender: () => <Footer />,
     menuHeaderRender: undefined,
@@ -64,5 +64,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
  */
 export const request = {
   baseURL: "http://localhost:8101",
-  // ...errorConfig,
+  withCredentials: true,
+  ...requestConfig,
+
 };

@@ -1,5 +1,5 @@
 import Footer from '@/components/Footer';
-import { userLogin } from '@/services/backend/userController';
+import { userLoginUsingPost } from '@/services/backend/userController';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
@@ -7,7 +7,8 @@ import { Helmet, history, useModel } from '@umijs/max';
 import { message, Tabs } from 'antd';
 import React, {useEffect, useState} from 'react';
 import Settings from '../../../../config/defaultSettings';
-import {listChartByPage} from "@/services/backend/chartController";
+import {listChartByPageUsingPost} from "@/services/backend/chartController";
+import { Link } from '@@/exports';
 
 const Login: React.FC = () => {
   const [type, setType] = useState<string>('account');
@@ -24,7 +25,7 @@ const Login: React.FC = () => {
     };
   });
   useEffect(()=>{
-    listChartByPage({}).then(res => {
+    listChartByPageUsingPost({}).then(res => {
       console.error('res',res)
     })
   })
@@ -33,20 +34,25 @@ const Login: React.FC = () => {
   const handleSubmit = async (values: API.UserLoginRequest) => {
     try {
       // 登录
-      const res = await userLogin({
+      const res = await userLoginUsingPost({
         ...values,
       });
+      if(res.code === 0){
+        const defaultLoginSuccessMessage = '登录成功！';
+        message.success(defaultLoginSuccessMessage);
+        // await fetchUserInfo();
+        // 保存已登录用户信息
+        setInitialState({
+          ...initialState,
+          currentUser: res.data,
+        });
+        const urlParams = new URL(window.location.href).searchParams;
+        history.push(urlParams.get('redirect') || '/');
+        return;
 
-      const defaultLoginSuccessMessage = '登录成功！';
-      message.success(defaultLoginSuccessMessage);
-      // 保存已登录用户信息
-      setInitialState({
-        ...initialState,
-        currentUser: res.data,
-      });
-      const urlParams = new URL(window.location.href).searchParams;
-      history.push(urlParams.get('redirect') || '/');
-      return;
+      }else{
+        message.error(res.message);
+      }
     } catch (error: any) {
       const defaultLoginFailureMessage = `登录失败，${error.message}`;
       message.error(defaultLoginFailureMessage);
@@ -72,8 +78,10 @@ const Login: React.FC = () => {
             maxWidth: '75vw',
           }}
           logo={<img alt="logo" style={{ height: '100%' }} src="/logo.svg" />}
-          title="鱼皮前端万用模板"
-          subTitle={'快速开发属于自己的前端项目'}
+          title="智能BI系统"
+          // subTitle={'快速开发属于自己的前端项目'}
+          subTitle={'                             '}
+
           initialValues={{
             autoLogin: true,
           }}
@@ -131,7 +139,7 @@ const Login: React.FC = () => {
               textAlign: 'right',
             }}
           >
-            <a>新用户注册</a>
+            <Link to="/user/register">注册</Link>
           </div>
         </LoginForm>
       </div>

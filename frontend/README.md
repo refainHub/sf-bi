@@ -13,7 +13,7 @@
 
 ### 主流框架 & 特性
 
-+ Ant Design Pro 6.0.0
++ 智能BI系统 6.0.0
 + React 18.2.0
 + node 至少 16 版本及以上
 + antd 5.2.2
@@ -22,7 +22,7 @@
 + Eslint
 + Prettier
 
-### Ant Design Pro 架构
+### 智能BI系统 架构
 
 #### Umi
 

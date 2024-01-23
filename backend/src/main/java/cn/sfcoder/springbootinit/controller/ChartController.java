@@ -1,5 +1,7 @@
 package cn.sfcoder.springbootinit.controller;
 
+import cn.sfcoder.springbootinit.model.dto.chart.*;
+import cn.sfcoder.springbootinit.utils.ExcelUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.gson.Gson;
@@ -12,10 +14,6 @@ import cn.sfcoder.springbootinit.constant.CommonConstant;
 import cn.sfcoder.springbootinit.constant.UserConstant;
 import cn.sfcoder.springbootinit.exception.BusinessException;
 import cn.sfcoder.springbootinit.exception.ThrowUtils;
-import cn.sfcoder.springbootinit.model.dto.chart.ChartAddRequest;
-import cn.sfcoder.springbootinit.model.dto.chart.ChartEditRequest;
-import cn.sfcoder.springbootinit.model.dto.chart.ChartQueryRequest;
-import cn.sfcoder.springbootinit.model.dto.chart.ChartUpdateRequest;
 import cn.sfcoder.springbootinit.model.entity.Chart;
 import cn.sfcoder.springbootinit.model.entity.User;
 import cn.sfcoder.springbootinit.service.ChartService;
@@ -26,6 +24,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -132,6 +131,60 @@ public class ChartController {
         }
         return ResultUtils.success(chart);
     }
+
+
+    /**
+     * 智能分析
+     *
+     * @param multipartFile
+     * @param genChartByAiRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/gen")
+    public BaseResponse<String> genChartByAi(@RequestPart("file") MultipartFile multipartFile,
+                                             GenChartByAiRequest genChartByAiRequest, HttpServletRequest request) {
+        String name = genChartByAiRequest.getName();
+        String goal = genChartByAiRequest.getGoal();
+        String chartType = genChartByAiRequest.getChartType();
+        // 校验
+        ThrowUtils.throwIf(StringUtils.isBlank(goal), ErrorCode.PARAMS_ERROR, "目标为空");
+        ThrowUtils.throwIf(StringUtils.isNotBlank(name) && name.length() > 100, ErrorCode.PARAMS_ERROR, "名称过长");
+
+        // 用户输入
+        StringBuilder userInput = new StringBuilder();
+        userInput.append("你是一个数据分析师，接下来我会给你我的分析目标和原始数据，请告诉我分析结论。").append("\n");
+        userInput.append("分析目标：").append(goal).append("\n");
+        // 压缩后的数据
+        String result = ExcelUtils.excelToCsv(multipartFile);
+        userInput.append("数据：").append(result).append("\n");
+        return ResultUtils.success(userInput.toString());
+//
+//        // 读取到用户上传的 excel 文件，进行一个处理
+//        User loginUser = userService.getLoginUser(request);
+//        // 文件目录：根据业务、用户来划分
+//        String uuid = RandomStringUtils.randomAlphanumeric(8);
+//        String filename = uuid + "-" + multipartFile.getOriginalFilename();
+//        File file = null;
+//        try {
+//
+//            // 返回可访问地址
+//            return ResultUtils.success("");
+//        } catch (Exception e) {
+////            log.error("file upload error, filepath = " + filepath, e);
+//            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "上传失败");
+//        } finally {
+//            if (file != null) {
+//                // 删除临时文件
+//                boolean delete = file.delete();
+//                if (!delete) {
+////                    log.error("file delete error, filepath = {}", filepath);
+//                }
+//            }
+//        }
+    }
+
+
 
     /**
      * 分页获取列表（封装类）

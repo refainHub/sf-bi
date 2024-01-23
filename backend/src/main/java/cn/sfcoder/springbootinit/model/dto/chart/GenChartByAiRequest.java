@@ -1,15 +1,16 @@
 package cn.sfcoder.springbootinit.model.dto.chart;
 
 import lombok.Data;
-
 import java.io.Serializable;
 
 /**
- * 创建请求
+ * @Author: refain
+ * @Description:
+ * @Date: 2024/1/24 1:05
+ * @Version: 1.0
  */
 @Data
-public class ChartAddRequest implements Serializable {
-
+public class GenChartByAiRequest implements Serializable {
     /**
      * 分析目标
      */
@@ -19,12 +20,6 @@ public class ChartAddRequest implements Serializable {
      * 图表名称
      */
     private String name;
-
-
-    /**
-     * 图表数据
-     */
-    private String chartData;
 
     /**
      * 图表类型
