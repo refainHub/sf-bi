@@ -100,3 +100,8 @@ knife4j:
         api-rule: package
         api-rule-resources:
           - cn.sfcoder.springbootinit.controller
+
+yuapi:
+  client:
+    access-key: iqdmvxtxpcrupq3hzhbot0ls4pz0ieaz
+    secret-key: e062gc8b2uttvyw0lyisv608tcyleqis

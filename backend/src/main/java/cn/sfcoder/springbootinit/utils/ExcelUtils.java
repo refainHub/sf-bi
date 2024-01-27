@@ -10,6 +10,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
+import org.springframework.mock.web.MockMultipartFile;
 /**
  * Excel 相关工具类
  */
@@ -62,10 +65,17 @@ public class ExcelUtils {
             List<String> dataList = dataMap.values().stream().filter(ObjectUtils::isNotEmpty).collect(Collectors.toList());
             stringBuilder.append(StringUtils.join(dataList, ",")).append("\n");
         }
+//        System.out.println(stringBuilder);
         return stringBuilder.toString();
     }
 
-    public static void main(String[] args) {
-        excelToCsv(null);
+
+
+
+    public static void main(String[] args) throws IOException {
+        File file = new File("src/main/resources/网站数据.xlsx");
+        MultipartFile cMultiFile = new MockMultipartFile("file", file.getName(), null, new FileInputStream(file));
+
+        excelToCsv(cMultiFile);
     }
 }
