@@ -1,5 +1,7 @@
 package cn.sfcoder.springbootinit.controller;
 
+import cn.hutool.core.io.FileUtil;
+import cn.sfcoder.springbootinit.manager.RedisLimiterManager;
 import cn.sfcoder.springbootinit.model.dto.chart.*;
 import cn.sfcoder.springbootinit.model.vo.BiResponse;
 import cn.sfcoder.springbootinit.utils.ExcelUtils;
@@ -30,6 +32,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 帖子接口
@@ -47,6 +51,10 @@ public class ChartController {
 
     @Resource
     private AiManager aiManager;
+
+    @Resource
+    private RedisLimiterManager redisLimiterManager;
+
 
 
     // region 增删改查
@@ -158,6 +166,24 @@ public class ChartController {
         ThrowUtils.throwIf(StringUtils.isNotBlank(chartName) && chartName.length() > 200, ErrorCode.PARAMS_ERROR, "图表名称过长");
         ThrowUtils.throwIf(StringUtils.isBlank(chartType), ErrorCode.PARAMS_ERROR, "图表类型为空");
 
+        // 校验文件
+        long size = multipartFile.getSize();
+        String originalFilename = multipartFile.getOriginalFilename();
+
+        // 校验文件大小
+        final long ONE_MB = 1024 * 1024L;
+        ThrowUtils.throwIf(size > ONE_MB, ErrorCode.PARAMS_ERROR, "文件超过 1M");
+
+       // 校验文件后缀 aaa.png
+        String suffix = FileUtil.getSuffix(originalFilename);
+        final List<String> validFileSuffixList = Arrays.asList("png", "jpg", "svg", "webp", "jpeg");
+
+        ThrowUtils.throwIf(!validFileSuffixList.contains(suffix), ErrorCode.PARAMS_ERROR, "文件后缀非法");
+
+
+        // 限流判断，每个用户一个限流器
+        redisLimiterManager.doRateLimit("genChartByAi" + loginUser.getId());
+
         // 模型ID
         long biModelId = 1659171950288818178L;
         StringBuilder userInput = new StringBuilder();
@@ -201,14 +227,6 @@ public class ChartController {
         biResponse.setGenResult(genResult);
         return ResultUtils.success(biResponse);
 
-//        userInput.append("你是一个数据分析师，接下来我会给你我的分析目标和原始数据，请告诉我分析结论。").append("\n");
-//        userInput.append("分析目标：").append(goal).append("\n");
-//        // 压缩后的数据
-//        String result = ExcelUtils.excelToCsv(multipartFile);
-//        userInput.append("数据：").append(result).append("\n");
-//        return ResultUtils.success(userInput.toString());
-//
-//
     }
 
 
